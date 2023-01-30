@@ -3,7 +3,7 @@ resource "aws_wafv2_web_acl" "main" {
   scope = "REGIONAL"
 
   default_action {
-    block {}
+    allow {}
   }
 
   ###RULE=================================
