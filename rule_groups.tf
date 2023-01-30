@@ -4,7 +4,7 @@ resource "aws_wafv2_rule_group" "Block-Countries" {
   capacity = 2
 
   rule {
-    name     = "MGT-Block-Countries"
+    name     = "Block-Countries"
     priority = 20
 
     action {

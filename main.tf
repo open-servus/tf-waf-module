@@ -3,7 +3,7 @@ resource "aws_wafv2_web_acl" "main" {
   scope = "REGIONAL"
 
   default_action {
-    allow {}
+    block {}
   }
 
   ###RULE=================================
@@ -55,7 +55,7 @@ resource "aws_wafv2_web_acl" "main" {
             name = "user-agent"
           }
         }
-        arn = aws_wafv2_regex_pattern_set.allowed-bots.arn
+        arn = aws_wafv2_regex_pattern_set.whitelist-bots.arn
 
         text_transformation {
           type     = "NONE"
@@ -195,8 +195,11 @@ resource "aws_wafv2_web_acl" "main" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
-        excluded_rule {
+        rule_action_override {
           name = "GenericRFI_QUERYARGUMENTS"
+          action_to_use {
+            count {}
+          }
         }
       }
     }
@@ -264,31 +267,31 @@ resource "aws_wafv2_web_acl" "main" {
     }
   }
 
-  rule {
-    name     = "AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 30
-    override_action {
-      none {}
-    }
-    statement {
-      managed_rule_group_statement {
-        name        = "AWSManagedRulesKnownBadInputsRuleSet"
-        vendor_name = "AWS"
-      }
-    }
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "AWSManagedRulesKnownBadInputsRuleSet"
-      sampled_requests_enabled   = true
-    }
-  }
+  ### You exceeded the capacity limit for a rule group or web ACL.
+  # rule {
+  #   name     = "AWSManagedRulesKnownBadInputsRuleSet"
+  #   priority = 30
+  #   override_action {
+  #     none {}
+  #   }
+  #   statement {
+  #     managed_rule_group_statement {
+  #       name        = "AWSManagedRulesKnownBadInputsRuleSet"
+  #       vendor_name = "AWS"
+  #     }
+  #   }
+  #   visibility_config {
+  #     cloudwatch_metrics_enabled = true
+  #     metric_name                = "AWSManagedRulesKnownBadInputsRuleSet"
+  #     sampled_requests_enabled   = true
+  #   }
+  # }
 
-  # ###RULE=================================
   # rule {
   #   name     = "${var.project_name}-Rate-Limit"
   #   priority = 31
 
-  #   action {
+  #   override_action {
   #     block {}
   #   }
 
@@ -305,7 +308,7 @@ resource "aws_wafv2_web_acl" "main" {
   #     sampled_requests_enabled   = true
   #   }
   # }
-  # ###RULE=================================
+  ### You exceeded the capacity limit for a rule group or web ACL.
 
   visibility_config {
     cloudwatch_metrics_enabled = true
