@@ -11,3 +11,5 @@ variable "blocked_ipv4" {}
 variable "blocked_ipv6" {}
 
 variable "blocked_countries" {}
+
+variable "alb_arn" {}

@@ -13,5 +13,6 @@ module "waf" {
   blocked_ipv4      = ["3.2.3.4/32", "4.6.7.8/32"]
   blocked_ipv6      = ["2001:db8:abcd:0012::0/64"]
   blocked_countries = ["TV", "TN"]
+  alb_arn           = "arn:xxx"
 }
 ```

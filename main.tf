@@ -3,7 +3,7 @@ resource "aws_wafv2_web_acl" "main" {
   scope = "REGIONAL"
 
   default_action {
-    block {}
+    allow {}
   }
 
   ###RULE=================================
@@ -201,6 +201,12 @@ resource "aws_wafv2_web_acl" "main" {
             count {}
           }
         }
+        rule_action_override {
+          name = "SizeRestrictions_BODY"
+          action_to_use {
+            count {}
+          }
+        }
       }
     }
     visibility_config {
@@ -320,4 +326,9 @@ resource "aws_wafv2_web_acl" "main" {
     Name        = "${var.project_name}-${var.environment}"
     Environment = var.environment
   }
+}
+
+resource "aws_wafv2_web_acl_association" "alb" {
+  resource_arn = var.alb_arn
+  web_acl_arn  = aws_wafv2_web_acl.main.arn
 }
